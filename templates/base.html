@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Conectividad Marítima - Los Lagos{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f7f6; }
+        nav { background: #004080; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        nav a { color: white; margin-right: 15px; text-decoration: none; font-weight: bold; }
+        .card { background: white; padding: 15px; border-radius: 5px; margin-bottom: 10px; border-left: 5px solid #004080; }
+        .alert { color: red; font-weight: bold; }
+        .ok { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="{% url 'rutas:inicio' %}">Inicio</a>
+        <a href="{% url 'flota:lista' %}">Flota y Barcazas</a>
+        <a href="{% url 'rutas:horarios' %}">Rutas y Horarios</a>
+        <a href="{% url 'terminales:lista' %}">Puertos y Rampas</a>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer style="margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Conectividad Marítima Región de Los Lagos - Sistema de Información</p>
+    </footer>
+
+</body>
+</html>

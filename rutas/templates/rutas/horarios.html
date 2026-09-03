@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Trayectos y Horarios{% endblock %}
+
+{% block content %}
+<h1>Itinerario de Trayectos</h1>
+<p>Temporada actual: <strong>{{ temporada }}</strong></p>
+
+{% for t in trayectos %}
+    <div class="card">
+        <h3>{{ t.origen }} ➔ {{ t.destino }}</h3>
+        <p>Frecuencia: {{ t.frecuencia }}</p>
+        <p>Estado del servicio: 
+            {% if t.activo %}
+                <span class="ok">Operando con normalidad</span>
+            {% else %}
+                <span class="alert">Servicio Suspendido por tiempo/mantenimiento</span>
+            {% endif %}
+        </p>
+    </div>
+{% endfor %}
+{% endblock %}

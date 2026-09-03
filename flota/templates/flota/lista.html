@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Catálogo de Barcazas{% endblock %}
+
+{% block content %}
+<h1>Catálogo de Embarcaciones</h1>
+{% for b in barcazas %}
+    <div class="card">
+        <h2>Barcaza: {{ b.nombre }}</h2>
+        <p>Capacidad: {{ b.capacidad_vehiculos }} vehículos | {{ b.capacidad_pasajeros }} pasajeros</p>
+        <p>Estado: 
+            {% if b.operativa %}
+                <span class="ok">Disponible</span>
+            {% else %}
+                <span class="alert">En Mantenimiento</span>
+            {% endif %}
+        </p>
+    </div>
+{% endfor %}
+{% endblock %}

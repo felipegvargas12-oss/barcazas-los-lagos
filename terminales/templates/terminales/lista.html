@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Puertos y Rampas{% endblock %}
+
+{% block content %}
+<h1>Ficha de Rampas y Terminales Marítimos</h1>
+{% for term in terminales %}
+    <div class="card">
+        <h3>{{ term.nombre }} ({{ term.comuna }})</h3>
+        <p>Estado del puerto: <strong>{{ term.estado }}</strong></p>
+        <p>Estado de mareas: {{ term.marea }}</p>
+    </div>
+{% endfor %}
+{% endblock %}
