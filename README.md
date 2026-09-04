@@ -51,7 +51,7 @@ python manage.py runserver
 
 ---
 
-## 4. Estructura del Proyecto y Distribución de Módulos
+## 4. Estructura del Proyecto y Distribución de Módulos (se ve mejor ene el readme de visual studio code)
 El proyecto está compuesto por la carpeta global de confuración (config) y las 3 aplicaciones Django independientes:
 
 barcazas_los_lagos/
@@ -105,14 +105,28 @@ En esta etapa del proyecto se utilizó la herramienta Gemini de Google como apoy
 ### Iteración 3: Maquetación global y herencia de plantillas
 * **Propósito:** Diseñar un sistema de plantillas reutilizable que contenga un menú de navegación unificado mediante herencia de HTML.
 * **Prompt utilizado:**
-  > *"Necesito crear un template maestro base.html en una carpeta global. Explícame como configurar settings.py, estructurar un menú de navegación con {% url %} y hacer que los HTML hijos hereden con {% extends %}"*
+  > *"Necesito crear un template maestro base.html en una carpeta global. Explícame como configurar settings.py, estructurar un menú de navegación con url y hacer que los HTML hijos hereden con extends"*
 * **Evaluación de la respuesta:** La IA detalló la configuración del directorio global de plantillas, la construcción del archivo base.html integrando etiquetas {% block %} y enlaces dinámicos con {% url %}, además de la sintaxis {% extends %} para los templates derivados.
 * **Aprendizaje obtenido:** Aprendimos sobre como hacer una implementación efectiva de herencia de templates y resolución dinámica de rutas nombradas en Django.
+
+### Iteración 4: Desarrollo del código de las vistas de cada aplicación
+* **Propósito:** Solicitar el código completo de las funciones en views.py para cada una de las 3 aplicaciones (flota, rutas y terminales).
+* **Prompt utilizado:**
+  > *"Necesito que desarrolles el código de las vistas para las 3 aplicaciones que seleccionamos (flota, rutas y terminales). Muestra cómo usar render para renderizar las plantillas y cómo estructurar los diccionarios de contexto con datos dinámicos simulados (listas, variables, booleanos) en cada vista."*
+* **Evaluación de la respuesta:** La respuesta fue sumamente clara y completa. La IA proporcionó el código exacto para cada archivo `views.py`, definiendo la lógica de backend necesaria para alimentar las 4 páginas del proyecto con información pertinente sobre barcazas, trayectos y puertos.
+* **Aprendizaje obtenido:** Aprendimos a construir funciones de vista en Django que gestionan solicitudes HTTP y empaquetan información estructurada en contexto dinámico para ser consumida por la capa de presentación.
+
+### Iteración 5: Desarrollo de los templates HTML de cada aplicación
+* **Propósito:** Obtener el código de las plantillas HTML locales para cada aplicación, asegurando el uso correcto de la herencia del diseño global y el renderizado de datos del contexto con sintaxis for e if.
+* **Prompt utilizado:**
+  > *"Necesito que desarrolles el código de los templates HTML para cada aplicación dentro de sus carpetas locales. Muestra cómo deben heredar de base.html usando extends y block content, y cómo desplegar el contexto recibido mediante etiquetas for, if y variables."*
+* **Evaluación de la respuesta:** La respuesta fue muy eficiente y precisa. La IA entregó el código HTML de las 4 páginas requeridas, aplicando adecuadamente la herencia del archivo maestro e integrando la lógica para mostrar estados operativos y listas detalladas.
+* **Aprendizaje obtenido:** Dominamos la creación de plantillas derivadas dentro de la estructura modular de Django, logrando presentar la información del backend de forma organizada y reutilizando el diseño común definido en el proyecto.
 
 ---
 
 ## 6. Conclusiones y Refleción Grupal
 El desarrollo de esta primera etapa permitió consolidar la estructura fundamental de un proyecto web profesional en Django. Se logró abstraer una problemática de conectividad del mundo real y representarla modularmente a través de tres aplicaciones desacopladas, utilizando vistas renderizadas, diccionarios de contexto y herencia de plantillas HTML.
 
-tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio que pudieramos reorganizarnos y poder desarollar el proyecto entre todo el equipo. Asimismo, la Inteligencia Artificial actuó como un asistente eficiente para resolver dudas de sintaxis y arquitectura, permitiendo al equipo comprender y verificar cada cambio implementado antes de llevarlo a producción. El proyecto queda completamente preparado para poder desarollarse a futuro y para realizar las siguientes evaluaciones.
+Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio que pudieramos reorganizarnos y poder desarollar el proyecto entre todo el equipo. Asi mismo, la Inteligencia Artificial actuó como un asistente eficiente para resolver dudas de sintaxis y arquitectura, permitiendo al equipo comprender y verificar cada cambio implementado antes de llevarlo a producción. El proyecto queda completamente preparado para poder desarollarse a futuro y para realizar las siguientes evaluaciones.
 
