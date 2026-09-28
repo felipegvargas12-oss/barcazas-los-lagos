@@ -2,18 +2,31 @@
 {% block title %}Catálogo de Barcazas{% endblock %}
 
 {% block content %}
-<h1>Catálogo de Embarcaciones</h1>
-{% for b in barcazas %}
-    <div class="card">
-        <h2>Barcaza: {{ b.nombre }}</h2>
-        <p>Capacidad: {{ b.capacidad_vehiculos }} vehículos | {{ b.capacidad_pasajeros }} pasajeros</p>
-        <p>Estado: 
-            {% if b.operativa %}
-                <span class="ok">Disponible</span>
-            {% else %}
-                <span class="alert">En Mantenimiento</span>
-            {% endif %}
-        </p>
-    </div>
-{% endfor %}
+<div class="container mt-4">
+    <h1 class="mb-4">Catálogo de Embarcaciones</h1>
+
+    {% for b in embarcaciones %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 card-title text-primary">{{ b.nombre }}</h2>
+                <p class="text-muted mb-2">Matrícula: <code>{{ b.matricula }}</code></p>
+                <p class="card-text mb-2">
+                    <strong>Capacidad:</strong> {{ b.capacidad_vehicular }} Vehiculos | {{ b.capacidad_pasajeros }} Pasajeros
+                </p>
+                <p class="card-text">
+                    <strong>Estado:</strong> 
+                    {% if b.activo %}
+                        <span class="badge bg-success">Disponible</span>
+                    {% else %}
+                        <span class="badge bg-danger">En Mantenimiento</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info">
+            No hay barcazas registradas actualmente en el sistema.
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}

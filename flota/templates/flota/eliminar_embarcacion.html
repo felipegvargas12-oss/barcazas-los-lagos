@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Eliminar embarcación{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Eliminar embarcación</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <p>¿Estás seguro que deseas eliminar la embarcación <strong>{{ embarcacion.nombre }}</strong>?</p>
+            <p class="text-muted">Matrícula: {{ embarcacion.matricula }}</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                <a href="{% url 'flota:lista_embarcaciones' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

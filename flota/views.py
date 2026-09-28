@@ -1,7 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render
-from django.http import HttpRequest
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import EmbarcacionForm
 from .models import Embarcacion
@@ -10,6 +8,10 @@ from .models import Embarcacion
 def lista_embarcaciones(request):
     embarcaciones = Embarcacion.objects.all().order_by('nombre')
     return render(request, 'flota/lista.html', {'embarcaciones': embarcaciones})
+
+
+def lista_flota(request):
+    return lista_embarcaciones(request)
 
 
 def crear_embarcacion(request):
@@ -22,7 +24,11 @@ def crear_embarcacion(request):
     else:
         form = EmbarcacionForm()
 
-    return render(request, 'flota/formulario_embarcacion.html', {'form': form, 'titulo': 'Registrar embarcación'})
+    return render(
+        request,
+        'flota/formulario_embarcacion.html',
+        {'form': form, 'titulo': 'Registrar embarcación'}
+    )
 
 
 def editar_embarcacion(request, pk):
@@ -37,7 +43,11 @@ def editar_embarcacion(request, pk):
     else:
         form = EmbarcacionForm(instance=embarcacion)
 
-    return render(request, 'flota/formulario_embarcacion.html', {'form': form, 'titulo': 'Editar embarcación'})
+    return render(
+        request,
+        'flota/formulario_embarcacion.html',
+        {'form': form, 'titulo': 'Editar embarcación'}
+    )
 
 
 def eliminar_embarcacion(request, pk):
