@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Embarcaciones{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Embarcaciones</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div style="margin-bottom: 15px;">
+        <a href="{% url 'flota:crear_embarcacion' %}" class="btn btn-primary">Nueva embarcación</a>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; background: white;">
+            <thead>
+                <tr style="background: #eaf2ff;">
+                    <th style="padding: 10px; border: 1px solid #dfe6ee; text-align: left;">Nombre</th>
+                    <th style="padding: 10px; border: 1px solid #dfe6ee; text-align: left;">Matrícula</th>
+                    <th style="padding: 10px; border: 1px solid #dfe6ee; text-align: left;">Pasajeros</th>
+                    <th style="padding: 10px; border: 1px solid #dfe6ee; text-align: left;">Vehículos</th>
+                    <th style="padding: 10px; border: 1px solid #dfe6ee; text-align: center;">Estado</th>
+                    <th style="padding: 10px; border: 1px solid #dfe6ee; text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for embarcacion in embarcaciones %}
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #dfe6ee;">{{ embarcacion.nombre }}</td>
+                        <td style="padding: 10px; border: 1px solid #dfe6ee;">{{ embarcacion.matricula }}</td>
+                        <td style="padding: 10px; border: 1px solid #dfe6ee;">{{ embarcacion.capacidad_pasajeros }}</td>
+                        <td style="padding: 10px; border: 1px solid #dfe6ee;">{{ embarcacion.capacidad_vehicular }}</td>
+                        <td style="padding: 10px; border: 1px solid #dfe6ee; text-align: center;">
+                            {% if embarcacion.activo %}
+                                <span style="display:inline-block; background:#d4edda; color:#155724; padding:4px 10px; border-radius: 999px; font-size: 0.85rem; font-weight: bold;">Operativa</span>
+                            {% else %}
+                                <span style="display:inline-block; background:#f8d7da; color:#842029; padding:4px 10px; border-radius: 999px; font-size: 0.85rem; font-weight: bold;">Inactiva</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 10px; border: 1px solid #dfe6ee; text-align: center;">
+                            <a href="{% url 'flota:editar_embarcacion' embarcacion.pk %}" style="margin-right: 8px; color: #0d6efd; text-decoration: none; font-weight: bold;">Editar</a>
+                            <a href="{% url 'flota:eliminar_embarcacion' embarcacion.pk %}" style="color: #b02a37; text-decoration: none; font-weight: bold;">Eliminar</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" style="padding: 15px; text-align: center; color: #666;">No hay embarcaciones registradas.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
