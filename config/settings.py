@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.db import models
+from django.contrib import admin
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -126,3 +128,30 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+class Embarcacion(models.Model):
+    nombre = models.CharField(max_length=150, verbose_name='Nombre')
+    matricula = models.CharField(
+        max_length=20,
+        unique=True,
+        db_index=True,
+        verbose_name='Matrícula',
+        help_text='Número o código único de identificación de la barcaza.'
+    )
+    capacidad_pasajeros = models.PositiveIntegerField(verbose_name='Capacidad de pasajeros')
+    capacidad_vehicular = models.PositiveIntegerField(verbose_name='Capacidad vehicular')
+    activo = models.BooleanField(default=True, verbose_name='Activo')
+
+    class Meta:
+        verbose_name = 'Embarcación'
+        verbose_name_plural = 'Embarcaciones'
+        ordering = ['nombre']
+
+    def __str__(self):
+        return self.nombre
+
+@admin.register(Embarcacion)
+class EmbarcacionAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'matricula', 'capacidad_pasajeros', 'capacidad_vehicular', 'activo')
+    list_filter = ('activo',)
+    search_fields = ('nombre', 'matricula')
