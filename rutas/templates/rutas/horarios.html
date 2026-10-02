@@ -4,7 +4,11 @@
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <h1>Itinerario de Trayectos</h1>
-    <a href="{% url 'rutas:crear' %}" style="padding: 10px 15px; background: #28a745; color: white; text-decoration: none; border-radius: 5px;">+ Nueva Ruta</a>
+    
+    <!-- SOLO SE MUESTRA SI EL USUARIO ESTÁ LOGUEADO -->
+    {% if user.is_authenticated %}
+        <a href="{% url 'rutas:crear' %}" style="padding: 10px 15px; background: #28a745; color: white; text-decoration: none; border-radius: 5px;">+ Nueva Ruta</a>
+    {% endif %}
 </div>
 
 {% for r in trayectos %}
@@ -12,13 +16,20 @@
         <h3>{{ r.origen }} ➔ {{ r.destino }}</h3>
         <p><strong>Duración:</strong> {{ r.duracion_horas }} hrs | <strong>Precio Base:</strong> ${{ r.precio_base }}</p>
         <p><strong>Estado:</strong> 
-            {% if r.activa %}<span style="color: green;">Activa / Disponible</span>
-            {% else %}<span style="color: red;">Suspendida</span>{% endif %}
+            {% if r.activa %}
+                <span style="color: green;">Activa / Disponible</span>
+            {% else %}
+                <span style="color: red;">Suspendida</span>
+            {% endif %}
         </p>
-        <div>
-            <a href="{% url 'rutas:editar' r.pk %}" style="color: blue; margin-right: 15px;">Editar</a>
-            <a href="{% url 'rutas:eliminar' r.pk %}" style="color: red;">Eliminar</a>
-        </div>
+
+        <!-- OPCIONES DE EDITAR Y ELIMINAR SOLO PARA USUARIOS LOGUEADOS -->
+        {% if user.is_authenticated %}
+            <div>
+                <a href="{% url 'rutas:editar' r.pk %}" style="color: blue; margin-right: 15px;">Editar</a>
+                <a href="{% url 'rutas:eliminar' r.pk %}" style="color: red;">Eliminar</a>
+            </div>
+        {% endif %}
     </div>
 {% empty %}
     <p>No hay rutas registradas actualmente.</p>

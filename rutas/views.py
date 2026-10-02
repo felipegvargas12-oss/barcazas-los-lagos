@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Ruta
 from .forms import RutaForm
 
+def inicio(request):
+    return render(request, 'rutas/inicio.html')
 # 1. LISTAR
 def horarios(request):
     trayectos = Ruta.objects.all().order_by('-fecha_creacion')
