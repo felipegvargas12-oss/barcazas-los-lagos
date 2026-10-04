@@ -11,6 +11,7 @@ class Ruta(models.Model):
     duracion_horas = models.DecimalField(max_digits=4, decimal_places=1, verbose_name="Duración (Horas)")
     precio_base = models.IntegerField(validators=[validar_precio_positivo], verbose_name="Precio Base ($)")
     activa = models.BooleanField(default=True, verbose_name="¿Ruta Activa?")
+    es_demostracion = models.BooleanField(default=False, verbose_name="Datos de demostración")
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
@@ -20,3 +21,22 @@ class Ruta(models.Model):
 
     def __str__(self):
         return f"{self.origen} ➔ {self.destino}"
+
+
+class Horario(models.Model):
+    ruta = models.ForeignKey(
+        Ruta,
+        on_delete=models.CASCADE,
+        related_name='horarios',
+        verbose_name='Ruta',
+    )
+    salida = models.DateTimeField(verbose_name='Fecha y hora de salida')
+    activo = models.BooleanField(default=True, verbose_name='Salida disponible')
+
+    class Meta:
+        ordering = ['salida']
+        verbose_name = 'Horario'
+        verbose_name_plural = 'Horarios'
+
+    def __str__(self):
+        return f"{self.ruta} - {self.salida:%d/%m/%Y %H:%M}"

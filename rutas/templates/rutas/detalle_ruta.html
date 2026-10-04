@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}{{ ruta.origen }} a {{ ruta.destino }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+    .route-back { display: inline-block; margin-bottom: 18px; color: #087e8b; font-weight: 700; text-decoration: none; }
+    .route-back:hover { text-decoration: underline; }
+    .route-detail-card { padding: 22px; border-left-color: #087e8b; }
+    .route-detail-title { margin-top: 4px; color: #153b50; }
+    .route-detail-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0 0; }
+    .route-detail-facts > div { padding: 13px 15px; background: #f4f7f6; border-radius: 4px; }
+    .route-detail-facts dt { color: #53616f; font-size: 0.82rem; }
+    .route-detail-facts dd { margin: 4px 0 0; color: #153b50; font-size: 1.05rem; font-weight: 700; }
+    .route-demo-note { margin: 16px 0 0; padding: 11px 14px; border-left: 3px solid #b7791f; background: #fff5df; color: #704d16; }
+    .route-map-section { margin-top: 30px; }
+    .route-map { width: 100%; height: min(62vh, 560px); min-height: 320px; border: 1px solid #cbd5d8; border-radius: 4px; }
+    .route-map-note { max-width: 900px; color: #53616f; font-size: 0.9rem; }
+    .route-detail-departures { margin-top: 30px; }
+    .route-detail-departures li { margin-bottom: 8px; }
+    @media (max-width: 600px) {
+        .route-detail-card { padding: 17px; }
+        .route-map { height: 48vh; min-height: 300px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a class="route-back" href="{% url 'rutas:horarios' %}">&larr; Volver a rutas y horarios</a>
+<section class="card route-detail-card">
+    <span class="route-eyebrow">Detalle del trayecto</span>
+    <h1 class="route-detail-title">{{ ruta.origen }} &rarr; {{ ruta.destino }}</h1>
+    {% if ruta.es_demostracion %}
+        <p class="route-demo-note"><strong>Datos de demostración:</strong> no representan un servicio vigente.</p>
+    {% endif %}
+    <dl class="route-detail-facts">
+        <div><dt>Duración estimada</dt><dd>{{ ruta.duracion_horas }} horas</dd></div>
+        <div><dt>Precio base</dt><dd>${{ ruta.precio_base }}</dd></div>
+    </dl>
+</section>
+
+<section class="route-map-section">
+<h2>Mapa de referencia</h2>
+{% if puntos_mapa %}
+    <div id="route-map" class="route-map" role="img" aria-label="Mapa esquemático de {{ ruta.origen }} a {{ ruta.destino }}"></div>
+    <p class="route-map-note">La línea punteada conecta puntos de referencia y no representa una ruta real de navegación. {% if hornopiren_es_referencial %}El punto de Hornopirén es referencial y no confirma la ubicación del embarcadero.{% endif %} Mapa: © OpenStreetMap contributors.</p>
+    {{ puntos_mapa|json_script:'route-map-points' }}
+{% else %}
+    <p>No hay coordenadas de referencia para ambos terminales, por lo que no se puede dibujar el mapa de esta ruta.</p>
+{% endif %}
+</section>
+
+<section class="route-detail-departures">
+<h2>Próximas salidas</h2>
+{% for salida in ruta.horarios.all %}
+    <ul>
+        <li><time datetime="{{ salida.salida|date:'c' }}">{{ salida.salida|date:'d/m/Y H:i' }}</time></li>
+    </ul>
+{% empty %}
+    <p>No hay salidas programadas.</p>
+{% endfor %}
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if puntos_mapa %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const mapPoints = JSON.parse(document.getElementById('route-map-points').textContent);
+    const routeMap = L.map('route-map');
+    const mapLocations = mapPoints.map((point) => [point.latitude, point.longitude]);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+    }).addTo(routeMap);
+
+    L.polyline(mapLocations, { color: '#087e8b', weight: 4, dashArray: '8 8' }).addTo(routeMap);
+    mapPoints.forEach((point) => {
+        L.marker([point.latitude, point.longitude])
+            .addTo(routeMap)
+            .bindPopup(`<strong>${point.name}</strong><br>${point.note}`);
+    });
+    routeMap.fitBounds(mapLocations, { padding: [32, 32] });
+</script>
+{% endif %}
+{% endblock %}

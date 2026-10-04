@@ -1,41 +1,43 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Ruta
-from .forms import RutaForm
+from django.db.models import Prefetch
+from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
+from .models import Horario, Ruta
+from .map_data import MAP_POINTS
 
 def inicio(request):
     return render(request, 'rutas/inicio.html')
-# 1. LISTAR
+
 def horarios(request):
-    trayectos = Ruta.objects.all().order_by('-fecha_creacion')
+    salidas_futuras = Horario.objects.filter(
+        activo=True,
+        salida__gte=timezone.now(),
+    )
+    trayectos = Ruta.objects.prefetch_related(
+        Prefetch('horarios', queryset=salidas_futuras)
+    ).order_by('origen', 'destino')
     return render(request, 'rutas/horarios.html', {'trayectos': trayectos})
 
-# 2. CREAR
-def crear_ruta(request):
-    if request.method == 'POST':
-        form = RutaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('rutas:horarios')
-    else:
-        form = RutaForm()
-    return render(request, 'rutas/form_ruta.html', {'form': form, 'titulo': 'Registrar Nueva Ruta'})
 
-# 3. EDITAR
-def editar_ruta(request, pk):
-    ruta = get_object_or_404(Ruta, pk=pk)
-    if request.method == 'POST':
-        form = RutaForm(request.POST, instance=ruta)
-        if form.is_valid():
-            form.save()
-            return redirect('rutas:horarios')
-    else:
-        form = RutaForm(instance=ruta)
-    return render(request, 'rutas/form_ruta.html', {'form': form, 'titulo': f'Editar Ruta: {ruta}'})
+def detalle_ruta(request, pk):
+    salidas_futuras = Horario.objects.filter(
+        activo=True,
+        salida__gte=timezone.now(),
+    )
+    ruta = get_object_or_404(
+        Ruta.objects.prefetch_related(
+            Prefetch('horarios', queryset=salidas_futuras)
+        ),
+        pk=pk,
+    )
+    puntos_mapa = [MAP_POINTS.get(ruta.origen), MAP_POINTS.get(ruta.destino)]
+    if any(punto is None for punto in puntos_mapa):
+        puntos_mapa = []
+    hornopiren_es_referencial = any(
+        punto['approximate_reference'] for punto in puntos_mapa
+    )
 
-# 4. ELIMINAR (POST Obligatorio)
-def eliminar_ruta(request, pk):
-    ruta = get_object_or_404(Ruta, pk=pk)
-    if request.method == 'POST':
-        ruta.delete()
-        return redirect('rutas:horarios')
-    return render(request, 'rutas/confirmar_eliminar.html', {'ruta': ruta})
+    return render(request, 'rutas/detalle_ruta.html', {
+        'ruta': ruta,
+        'puntos_mapa': puntos_mapa,
+        'hornopiren_es_referencial': hornopiren_es_referencial,
+    })

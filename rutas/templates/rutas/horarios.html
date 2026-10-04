@@ -1,37 +1,83 @@
 {% extends 'base.html' %}
-{% block title %}Itinerario de Rutas{% endblock %}
+{% block title %}Rutas y Horarios{% endblock %}
+
+{% block extra_head %}
+<style>
+    .routes-intro { margin-top: -8px; margin-bottom: 24px; color: #53616f; }
+    .route-card { padding: 22px; border-left-color: #087e8b; }
+    .route-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .route-eyebrow { color: #53616f; font-size: 0.8rem; font-weight: 700; }
+    .route-title { margin: 5px 0 0; }
+    .route-title a { color: #153b50; text-decoration: none; }
+    .route-title a:hover { color: #087e8b; text-decoration: underline; }
+    .route-status { flex: 0 0 auto; padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: 700; }
+    .route-status-active { background: #e4f4ec; color: #176b43; }
+    .route-status-inactive { background: #fbe9e7; color: #9c3028; }
+    .route-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+    .route-facts > div { padding: 13px 15px; background: #f4f7f6; border-radius: 4px; }
+    .route-facts dt { color: #53616f; font-size: 0.82rem; }
+    .route-facts dd { margin: 4px 0 0; color: #153b50; font-size: 1.05rem; font-weight: 700; }
+    .route-demo-note { margin: 16px 0 0; padding: 11px 14px; border-left: 3px solid #b7791f; background: #fff5df; color: #704d16; }
+    .route-departures { margin-top: 20px; }
+    .route-departures h3 { margin-bottom: 10px; color: #153b50; }
+    .departure-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .departure-list li { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border-left: 3px solid #087e8b; background: #f4f7f6; }
+    .departure-list time { color: #153b50; font-weight: 700; }
+    .departure-list span { color: #53616f; font-size: 0.85rem; }
+    .route-empty { color: #53616f; }
+    @media (max-width: 600px) {
+        .route-card { padding: 17px; }
+        .route-card-header { flex-direction: column; gap: 10px; }
+        .route-status { align-self: flex-start; }
+        .route-facts { gap: 8px; }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h1>Itinerario de Trayectos</h1>
-    
-    <!-- SOLO SE MUESTRA SI EL USUARIO ESTÁ LOGUEADO -->
-    {% if user.is_authenticated %}
-        <a href="{% url 'rutas:crear' %}" style="padding: 10px 15px; background: #28a745; color: white; text-decoration: none; border-radius: 5px;">+ Nueva Ruta</a>
-    {% endif %}
-</div>
+<h1>Rutas y horarios</h1>
+<p class="routes-intro">Consulta trayectos, duración y próximas salidas disponibles.</p>
 
 {% for r in trayectos %}
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 5px;">
-        <h3>{{ r.origen }} ➔ {{ r.destino }}</h3>
-        <p><strong>Duración:</strong> {{ r.duracion_horas }} hrs | <strong>Precio Base:</strong> ${{ r.precio_base }}</p>
-        <p><strong>Estado:</strong> 
-            {% if r.activa %}
-                <span style="color: green;">Activa / Disponible</span>
-            {% else %}
-                <span style="color: red;">Suspendida</span>
-            {% endif %}
-        </p>
-
-        <!-- OPCIONES DE EDITAR Y ELIMINAR SOLO PARA USUARIOS LOGUEADOS -->
-        {% if user.is_authenticated %}
+    <article class="card route-card">
+        <header class="route-card-header">
             <div>
-                <a href="{% url 'rutas:editar' r.pk %}" style="color: blue; margin-right: 15px;">Editar</a>
-                <a href="{% url 'rutas:eliminar' r.pk %}" style="color: red;">Eliminar</a>
+                <span class="route-eyebrow">Trayecto marítimo</span>
+                <h2 class="route-title">
+                    <a href="{% url 'rutas:detalle' r.pk %}">{{ r.origen }} &rarr; {{ r.destino }}</a>
+                </h2>
             </div>
+            {% if r.activa %}
+                <span class="route-status route-status-active">Activa</span>
+            {% else %}
+                <span class="route-status route-status-inactive">Suspendida</span>
+            {% endif %}
+        </header>
+
+        {% if r.es_demostracion %}
+            <p class="route-demo-note"><strong>Datos de demostración:</strong> no representan un servicio vigente.</p>
         {% endif %}
-    </div>
+
+        <dl class="route-facts">
+            <div><dt>Duración estimada</dt><dd>{{ r.duracion_horas }} horas</dd></div>
+            <div><dt>Precio base</dt><dd>${{ r.precio_base }}</dd></div>
+        </dl>
+
+        <section class="route-departures" aria-label="Próximas salidas">
+            <h3>Próximas salidas</h3>
+            {% for salida in r.horarios.all %}
+                <ul class="departure-list">
+                    <li>
+                        <time datetime="{{ salida.salida|date:'c' }}">{{ salida.salida|date:'d/m/Y H:i' }}</time>
+                        <span>Salida programada</span>
+                    </li>
+                </ul>
+            {% empty %}
+                <p class="route-empty">No hay salidas programadas.</p>
+            {% endfor %}
+        </section>
+    </article>
 {% empty %}
-    <p>No hay rutas registradas actualmente.</p>
+    <div class="card route-empty">No hay rutas registradas actualmente.</div>
 {% endfor %}
 {% endblock %}
