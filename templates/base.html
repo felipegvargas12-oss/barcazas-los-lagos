@@ -12,6 +12,7 @@
         .alert { color: red; font-weight: bold; }
         .ok { color: green; font-weight: bold; }
     </style>
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
 
@@ -31,5 +32,6 @@
         <p>&copy; 2026 Conectividad Marítima Región de Los Lagos - Sistema de Información</p>
     </footer>
 
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

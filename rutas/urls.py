@@ -5,8 +5,6 @@ app_name = 'rutas'
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
-    path('horarios/', views.horarios, name='horarios'), 
-    path('crear/', views.crear_ruta, name='crear'),
-    path('editar/<int:pk>/', views.editar_ruta, name='editar'),
-    path('eliminar/<int:pk>/', views.eliminar_ruta, name='eliminar'),
+    path('horarios/', views.horarios, name='horarios'),
+    path('horarios/<int:pk>/', views.detalle_ruta, name='detalle'),
 ]
