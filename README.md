@@ -182,8 +182,11 @@ Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio 
 * **CRUD administrativo:** Las operaciones para crear, editar y eliminar terminales se realizan desde Django Admin (`/admin/`); la página pública solo permite consultar.
 * **Datos de demostración:** La migración `terminales.0001_initial` crea la tabla del modelo. El comando `python manage.py cargar_terminales_demo` carga Pargua, Chacao y Hornopirén con los nombres y comunas relacionados con las rutas. Los registros son ficticios, se identifican como demostración y el comando se puede repetir sin duplicarlos.
 * **Interfaz y pruebas:** La página muestra estado operativo, marea y aviso de demostración con un diseño adaptable. Se añadieron pruebas para consulta pública, validación y CRUD en Admin y carga demo idempotente.
+* **Mapa de ubicación:** Cada terminal con coordenadas de referencia se puede abrir desde su nombre para ver un mapa Leaflet/OpenStreetMap y un marcador. Si no hay coordenadas, se informa en la ficha; las ubicaciones aproximadas están identificadas como referenciales.
 * **Rama de trabajo:** `terminales`.
 
 ### Prompt utilizado para esta actualización
 > *"necesito trabajar en puertos y rampas, y que la rama se llame terminales"*
+
+> *"necesito que al hacer click en algunas de las opciones se muestre el mapa con la ubicacion de estas"*
 

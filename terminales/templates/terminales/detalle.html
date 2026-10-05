@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}{{ terminal.nombre }} - Puertos y Rampas{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+    .terminal-back { display: inline-block; margin-bottom: 18px; color: #087e8b; font-weight: 700; text-decoration: none; }
+    .terminal-back:hover { text-decoration: underline; }
+    .terminal-detail-card { padding: 22px; border-left-color: #087e8b; }
+    .terminal-detail-title { margin: 5px 0 0; color: #153b50; }
+    .terminal-detail-comuna { margin: 7px 0 0; color: #53616f; }
+    .terminal-status { display: inline-block; margin-top: 15px; padding: 6px 10px; border-radius: 4px; background: #e4f4ec; color: #176b43; font-size: 0.85rem; font-weight: 700; }
+    .terminal-status-caution { background: #fff5df; color: #704d16; }
+    .terminal-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0 0; }
+    .terminal-facts > div { padding: 13px 15px; background: #f4f7f6; border-radius: 4px; }
+    .terminal-facts dt { color: #53616f; font-size: 0.82rem; }
+    .terminal-facts dd { margin: 4px 0 0; color: #153b50; font-size: 1.05rem; font-weight: 700; }
+    .terminal-demo-note { margin: 16px 0 0; padding: 11px 14px; border-left: 3px solid #b7791f; background: #fff5df; color: #704d16; }
+    .terminal-map-section { margin-top: 30px; }
+    .terminal-map { width: 100%; height: min(62vh, 560px); min-height: 320px; border: 1px solid #cbd5d8; border-radius: 4px; }
+    .terminal-map-note { color: #53616f; font-size: 0.9rem; }
+    @media (max-width: 600px) {
+        .terminal-detail-card { padding: 17px; }
+        .terminal-map { height: 48vh; min-height: 300px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a class="terminal-back" href="{% url 'terminales:lista' %}">&larr; Volver a Puertos y Rampas</a>
+<section class="card terminal-detail-card">
+    <span class="terminal-eyebrow">Terminal marítimo</span>
+    <h1 class="terminal-detail-title">{{ terminal.nombre }}</h1>
+    <p class="terminal-detail-comuna">{{ terminal.comuna }}</p>
+    {% if terminal.estado == 'Operativa' %}
+        <span class="terminal-status">{{ terminal.estado }}</span>
+    {% else %}
+        <span class="terminal-status terminal-status-caution">{{ terminal.estado }}</span>
+    {% endif %}
+    <dl class="terminal-facts">
+        <div><dt>Estado de marea</dt><dd>{{ terminal.marea }}</dd></div>
+    </dl>
+    {% if terminal.es_demostracion %}
+        <p class="terminal-demo-note"><strong>Demostración:</strong> los datos son ficticios y no confirman las condiciones actuales.</p>
+    {% endif %}
+</section>
+
+<section class="terminal-map-section">
+    <h2>Ubicación</h2>
+    {% if punto_mapa %}
+        <div id="terminal-map" class="terminal-map" role="img" aria-label="Mapa de ubicación de {{ terminal.nombre }}"></div>
+        <p class="terminal-map-note">{{ punto_mapa.note }} Mapa: &copy; OpenStreetMap contributors.</p>
+        {{ punto_mapa|json_script:'terminal-map-point' }}
+    {% else %}
+        <p>No hay coordenadas registradas para este terminal.</p>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if punto_mapa %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const terminalPoint = JSON.parse(document.getElementById('terminal-map-point').textContent);
+    const terminalLocation = [terminalPoint.latitude, terminalPoint.longitude];
+    const terminalMap = L.map('terminal-map').setView(terminalLocation, 13);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+    }).addTo(terminalMap);
+
+    L.marker(terminalLocation)
+        .addTo(terminalMap)
+        .bindPopup(`<strong>${terminalPoint.name}</strong><br>${terminalPoint.note}`)
+        .openPopup();
+</script>
+{% endif %}
+{% endblock %}

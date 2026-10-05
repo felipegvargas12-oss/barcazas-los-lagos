@@ -43,8 +43,50 @@ class TerminalesTests(TestCase):
 		self.assertContains(response, 'Rampa Pargua')
 		self.assertContains(response, 'Calbuco')
 		self.assertContains(response, 'Pleamar (Alta)')
+		terminal = Terminal.objects.get(nombre='Rampa Pargua')
+		self.assertContains(response, reverse('terminales:detalle', args=[terminal.pk]))
 		self.assertNotContains(response, 'Editar')
 		self.assertNotContains(response, 'Eliminar')
+
+	def test_terminal_detail_shows_map_for_known_location(self):
+		call_command('cargar_terminales_demo')
+		terminales_demo = Terminal.objects.filter(es_demostracion=True)
+		self.assertEqual(terminales_demo.count(), 3)
+
+		for terminal in terminales_demo:
+			with self.subTest(terminal=terminal.nombre):
+				response = self.client.get(
+					reverse('terminales:detalle', args=[terminal.pk])
+				)
+				self.assertEqual(response.status_code, 200)
+				self.assertContains(response, 'id="terminal-map"')
+
+		hornopiren = Terminal.objects.get(nombre='Terminal Embarcadero Hornopirén')
+		hornopiren_response = self.client.get(
+			reverse('terminales:detalle', args=[hornopiren.pk])
+		)
+		self.assertContains(
+			hornopiren_response,
+			'no una ubicación verificada del embarcadero',
+		)
+
+	def test_terminal_detail_without_coordinates_shows_explanation(self):
+		terminal = Terminal.objects.create(
+			nombre='Terminal sin coordenadas',
+			comuna='Comuna de prueba',
+			estado='Operativa',
+			marea='Sin información',
+		)
+
+		response = self.client.get(reverse('terminales:detalle', args=[terminal.pk]))
+
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, 'No hay coordenadas registradas para este terminal.')
+
+	def test_missing_terminal_detail_returns_404(self):
+		response = self.client.get(reverse('terminales:detalle', args=[999999]))
+
+		self.assertEqual(response.status_code, 404)
 
 	def test_demo_command_matches_route_terminal_names_and_is_idempotent(self):
 		call_command('cargar_terminales_demo')

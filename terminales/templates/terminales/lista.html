@@ -32,7 +32,9 @@
         <header class="terminal-card-header">
             <div>
                 <span class="terminal-eyebrow">Terminal marítimo</span>
-                <h2 class="terminal-name">{{ term.nombre }}</h2>
+                <h2 class="terminal-name">
+                    <a href="{% url 'terminales:detalle' term.pk %}">{{ term.nombre }}</a>
+                </h2>
                 <p class="terminal-comuna">{{ term.comuna }}</p>
             </div>
             {% if term.estado == 'Operativa' %}
