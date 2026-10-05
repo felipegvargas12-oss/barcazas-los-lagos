@@ -144,14 +144,7 @@ Además de las iteraciones anteriores, GitHub Copilot se utilizó posteriormente
 
 ---
 
-## 6. Conclusiones y Refleción Grupal
-El desarrollo de esta primera etapa permitió consolidar la estructura fundamental de un proyecto web profesional en Django. Se logró abstraer una problemática de conectividad del mundo real y representarla modularmente a través de tres aplicaciones desacopladas, utilizando vistas renderizadas, diccionarios de contexto y herencia de plantillas HTML.
-
-Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio que pudieramos reorganizarnos y poder desarollar el proyecto entre todo el equipo. Asi mismo, la Inteligencia Artificial actuó como un asistente eficiente para resolver dudas de sintaxis y arquitectura, permitiendo al equipo comprender y verificar cada cambio implementado antes de llevarlo a producción. El proyecto queda completamente preparado para poder desarollarse a futuro y para realizar las siguientes evaluaciones.
-
----
-
-## 7. Cambios recientes en Rutas y Horarios
+## 6. Cambios recientes en Rutas y Horarios
 * **Consulta pública:** Se pueden consultar rutas, estado y próximas salidas futuras desde la página de rutas. Las personas pueden abrir el detalle de cada trayecto desde su nombre.
 * **CRUD administrativo:** La creación, edición y eliminación de rutas y horarios se realiza únicamente desde Django Admin (`/admin/`). La página pública no muestra esos controles.
 * **Modelo y migraciones:** Se agregó `Horario`, relacionado con `Ruta`, y el indicador `es_demostracion` para distinguir datos ficticios. Las migraciones agregadas son `0002_horario` y `0003_ruta_es_demostracion`.
@@ -160,7 +153,7 @@ Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio 
 * **Diseño y pruebas:** El listado y el detalle del trayecto se adaptaron al estilo de tarjetas de “Puertos y Rampas” y a pantallas móviles. Se añadieron pruebas para consulta pública, carga demo y detalle con mapa. También se agregó `psycopg[binary]` para instalar el controlador de PostgreSQL en Windows.
 * **Git:** Los cambios se trabajaron en `feature/consulta-rutas-horarios`; `.env` permanece excluido del repositorio.
 
-### Iteración 8: Implementación de Persistencia PostgreSQL y CRUD Completo de Flota
+### Iteración 7: Implementación de Persistencia PostgreSQL y CRUD Completo de Flota
 
 En esta etapa se utilizó la asistencia de IA para estructurar de forma profesional y segura la persistencia relacional y el ciclo CRUD completo para el módulo de embarcaciones, cumpliendo con las pautas de validación y control de acceso.
 
@@ -193,18 +186,9 @@ En esta etapa se utilizó la asistencia de IA para estructurar de forma profesio
   > confirmar_eliminar.html: Cuadro de diálogo de confirmación previa a la baja definitiva.
   > Asegura la visualización del bloque de alertas de Django."*
 
-### Prompts utilizados para esta actualización
-> *"necesito trabajaran en el apartado de rutas"*
+## 6. Conclusiones y Refleción Grupal
+El desarrollo de esta primera etapa permitió consolidar la estructura fundamental de un proyecto web profesional en Django. Se logró abstraer una problemática de conectividad del mundo real y representarla modularmente a través de tres aplicaciones desacopladas, utilizando vistas renderizadas, diccionarios de contexto y herencia de plantillas HTML.
 
-> *"necesito que las personas puedan consultar sobre los las rutas y los horarios, tambien recuerda crear ramas y el uso correcto de los CRUD"*
+Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio que pudieramos reorganizarnos y poder desarollar el proyecto entre todo el equipo. Asi mismo, la Inteligencia Artificial actuó como un asistente eficiente para resolver dudas de sintaxis y arquitectura, permitiendo al equipo comprender y verificar cada cambio implementado antes de llevarlo a producción. El proyecto queda completamente preparado para poder desarollarse a futuro y para realizar las siguientes evaluaciones.
 
-> *"solo de demostracion pero que coincidan con los de puertos y rampas"*
-
-> *"las opciones de editar, eliminar o agregar sacalas ya que eso solo deberia de aparecer en las opciones de admin, al igual que el que dice nueva ruta en verde"*
-
-> *"es agregar la opcion de hacer click en unas de las opciones de rutas y horarios y que aparesca el mapa que muestre la ruta de esta ?¿"*
-
-> *"quiero que se vea un poco mas profecional el apartado de rutas y horarios como esta en puertos y rampas"*
-
-> *"ahora necesito que en el readme agreges todos los cambios que se hicieron y los prompts que se utilizaron"*
-
+---
