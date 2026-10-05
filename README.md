@@ -201,3 +201,8 @@ Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio 
 **Prompt utilizado:**
 > *"al momento de añadir una terminal que al colocar solo signos tire un error"*
 
+### Prompts adicionales de verificación
+> *"verificar si se guardo la terminal en postgredSQL"*
+
+> *"dame el comando para yo verificarlo"*
+
