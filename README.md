@@ -160,6 +160,39 @@ Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio 
 * **Diseño y pruebas:** El listado y el detalle del trayecto se adaptaron al estilo de tarjetas de “Puertos y Rampas” y a pantallas móviles. Se añadieron pruebas para consulta pública, carga demo y detalle con mapa. También se agregó `psycopg[binary]` para instalar el controlador de PostgreSQL en Windows.
 * **Git:** Los cambios se trabajaron en `feature/consulta-rutas-horarios`; `.env` permanece excluido del repositorio.
 
+### Iteración 8: Implementación de Persistencia PostgreSQL y CRUD Completo de Flota
+
+En esta etapa se utilizó la asistencia de IA para estructurar de forma profesional y segura la persistencia relacional y el ciclo CRUD completo para el módulo de embarcaciones, cumpliendo con las pautas de validación y control de acceso.
+
+#### 1. Infraestructura y Persistencia (Base de Datos y Entorno)
+* **Problema:** Conectar el proyecto Django a PostgreSQL local resolviendo dependencias nativas en Windows y resguardando credenciales fuera del control de versiones.
+* **Prompt utilizado:**
+  > *"Configura la conexión de base de datos en config/settings.py para utilizar PostgreSQL con la librería psycopg en Django 5. Utiliza python-dotenv para cargar variables de entorno (DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT) desde un archivo .env que esté protegido por .gitignore. Explica qué paquete binario se requiere en entornos Windows para evitar errores de compilación con C/libpq y cómo aplicar las migraciones iniciales."*
+
+#### 2. Capa de Modelado ORM y Panel Administrativo
+* **Problema:** Representar adecuadamente la entidad `Embarcacion` para la navegación regional y dotar al panel de administración de herramientas eficientes de consulta.
+* **Prompt utilizado:**
+  > *"En la app flota, define el modelo Embarcacion en flota/models.py con los campos: nombre (CharField), matrícula (CharField única e indexada), capacidad de pasajeros (PositiveIntegerField), capacidad vehicular (PositiveIntegerField) y activo (BooleanField). Configura Meta con nombres descriptivos y orden por nombre. Luego, regístralo en flota/admin.py con una clase ModelAdmin que incluya visualización de columnas (list_display), filtros por estado (list_filter) y barra de búsqueda (search_fields)."*
+
+#### 3. Formularios con Validaciones de Negocio (ModelForm)
+* **Problema:** Crear un formulario tipado con Bootstrap que impida el ingreso de datos erróneos o incoherentes para la capacidad del transbordador.
+* **Prompt utilizado:**
+  > *"Crea flota/forms.py implementando un ModelForm para Embarcacion. Agrega widgets HTML con clases CSS de Bootstrap (form-control, form-check-input) y placeholders. Implementa métodos de validación personalizada: clean_matricula para normalizar a mayúsculas y validar una longitud mínima de 4 caracteres, y clean_capacidad_pasajeros para asegurar que el valor sea estrictamente mayor a 0, arrojando forms.ValidationError en caso de error."*
+
+#### 4. Lógica de Control (Vistas CRUD y Enrutamiento)
+* **Problema:** Construir las operaciones de listar, crear, modificar y eliminar embarcaciones asegurando la captura de excepciones 404 y retroalimentación al usuario.
+* **Prompt utilizado:**
+  > *"Implementa en flota/views.py las vistas funcionales para el ciclo CRUD completo de Embarcacion: listar (lista_embarcaciones), registrar (crear_embarcacion), modificar (editar_embarcacion con get_object_or_404) y eliminar (eliminar_embarcacion). Utiliza django.contrib.messages para notificar al usuario sobre cada acción exitosa. Configura las rutas en flota/urls.py con un espacio de nombres app_name = 'flota' y vincúlalas al enrutador principal de Django."*
+
+#### 5. Interfaz de Usuario y Templates Derivados
+* **Problema:** Elaborar la presentación visual heredada de `base.html` que permita manipular el CRUD respetando estándares de accesibilidad y confirmación destructiva.
+* **Prompt utilizado:**
+  > *"Diseña las plantillas HTML dentro de flota/templates/flota/ heredando de base.html:
+  > lista_embarcaciones.html: Tabla responsiva con badges para el estado operativo y botones de acción.
+  > form_embarcacion.html: Formulario unificado para alta y edición con renderizado de errores por campo y protección CSRF.
+  > confirmar_eliminar.html: Cuadro de diálogo de confirmación previa a la baja definitiva.
+  > Asegura la visualización del bloque de alertas de Django."*
+
 ### Prompts utilizados para esta actualización
 > *"necesito trabajaran en el apartado de rutas"*
 
