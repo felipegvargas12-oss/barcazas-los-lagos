@@ -41,9 +41,17 @@ Linux/macOS: source source .venv/bin/activate
 Instala Django y las demas llibrerias requeridas registradas en el archivo requirements.txt:
 pip install -r requirements.txt
 
+Para la configuración actual de rutas y horarios, también instala PostgreSQL Server, crea la base `barcazas_db` y configura la contraseña local en `.env` a partir de `.env.example`. El archivo `.env` está excluido de Git.
+
 ### 3.5.- Ejecutar migraciones iniciales
 Ejecuta las migraciones de Django para preparar el sistema:
 python manage.py migrate
+
+Para cargar las rutas y horarios ficticios de demostración, ejecuta:
+python manage.py cargar_rutas_demo
+
+Para administrar rutas y horarios desde `/admin/`, crea una cuenta administrativa con:
+python manage.py createsuperuser
 
 ### 3.6.- Inicia el servidor de desarollo
 Inicia el servidor local de prueba:
@@ -69,6 +77,10 @@ barcazas_los_lagos/
 │   ├── urls.py             # Rutas locales (/ y /horarios/)
 │   ├── views.py            # Vistas inicio y horarios
 │   └── templates/rutas/    # Vistas HTML derivadas
+│   ├── migrations/         # Esquema de rutas y horarios
+│   ├── management/         # Comando cargar_rutas_demo
+│   ├── models.py           # Modelos Ruta y Horario
+│   └── map_data.py         # Coordenadas de referencia para el mapa
 |
 ├── templates/              # Directorio global de plantillas
 │   └── base.html           # Template maestro con maquetación y menú común
@@ -88,14 +100,21 @@ barcazas_los_lagos/
 ## 5. Registro de Uso de IA
 En esta etapa del proyecto se utilizó la herramienta Gemini de Google como apoyo para la resolución de dudas técnicas y arquitectura de software. En total se realizaron 3 iteraciones clave con la IA. A continuación, se detalla el propósito de cada consulta, la efectividad de la respuesta obtenida y los aprendizajes generados por el grupo:
 
+Además de las iteraciones anteriores, GitHub Copilot se utilizó posteriormente para ampliar el módulo de rutas y horarios. Esas solicitudes se documentan en la Iteración 6.
+
 ### Iteración 1: Delimitación de la idea y arquitectura base
 * **Propósito:** Delimitar la idea del proyecto y estructurar la arquitectura base del sistema en Django conforme a los requerimientos de la evaluación.
 * **Prompt utilizado:**
   > *"Estoy comenzando un proyecto en Django para una página sobre conectividad de barcazas en la Región de Los Lagos. Necesito definir 3 aplicaciones independientes que representen módulos reales del sistema. Recuerda que el alcance llega solo hasta templates, sin modelos ni base de datos. Qué estructura me recomiendas?"*
+
 * **Evaluación de la respuesta:** La IA presentó cinco propuestas de arquitectura modular. Tras el análisis grupal, se seleccionaron tres módulos funcionales concretos: Catálogo de embarcaciones (flota), Itinerario de trayectos (rutas) y Ficha de rampas y terminales marítimos (terminales).
+
 * **Aprendizaje obtenido:** Aprendimos sobre la división modular en Django mediante aplicaciones independientes, y así poder mantener un diseño escalable para futuras entregas.
 
+
+
 ### Iteración 2: Creación de aplicaciones y enrutamiento modular
+
 * **Propósito:** Implementar la estructura física de las aplicaciones e interconectar los archivos de rutas locales con el enrutador principal del proyecto mediante la función include.
 * **Prompt utilizado:**
   > *"Explícame paso a paso cómo crear cada app con startapp, configurar los archivos urls.py de cada app y conectarlos al urls.py principal usando include"*
@@ -129,4 +148,30 @@ En esta etapa del proyecto se utilizó la herramienta Gemini de Google como apoy
 El desarrollo de esta primera etapa permitió consolidar la estructura fundamental de un proyecto web profesional en Django. Se logró abstraer una problemática de conectividad del mundo real y representarla modularmente a través de tres aplicaciones desacopladas, utilizando vistas renderizadas, diccionarios de contexto y herencia de plantillas HTML.
 
 Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio que pudieramos reorganizarnos y poder desarollar el proyecto entre todo el equipo. Asi mismo, la Inteligencia Artificial actuó como un asistente eficiente para resolver dudas de sintaxis y arquitectura, permitiendo al equipo comprender y verificar cada cambio implementado antes de llevarlo a producción. El proyecto queda completamente preparado para poder desarollarse a futuro y para realizar las siguientes evaluaciones.
+
+---
+
+## 7. Cambios recientes en Rutas y Horarios
+* **Consulta pública:** Se pueden consultar rutas, estado y próximas salidas futuras desde la página de rutas. Las personas pueden abrir el detalle de cada trayecto desde su nombre.
+* **CRUD administrativo:** La creación, edición y eliminación de rutas y horarios se realiza únicamente desde Django Admin (`/admin/`). La página pública no muestra esos controles.
+* **Modelo y migraciones:** Se agregó `Horario`, relacionado con `Ruta`, y el indicador `es_demostracion` para distinguir datos ficticios. Las migraciones agregadas son `0002_horario` y `0003_ruta_es_demostracion`.
+* **Datos de demostración:** El comando `python manage.py cargar_rutas_demo` crea dos rutas y cuatro salidas ficticias, usando los mismos nombres de Pargua, Chacao y Hornopirén de la sección de terminales. Se puede ejecutar nuevamente sin duplicar esas salidas.
+* **Mapa:** El detalle de cada ruta muestra marcadores y una línea esquemática con Leaflet y OpenStreetMap. Las coordenadas son referenciales; el punto de Hornopirén corresponde al centro de la localidad, no a una ubicación confirmada del embarcadero. El mapa no representa navegación real.
+* **Diseño y pruebas:** El listado y el detalle del trayecto se adaptaron al estilo de tarjetas de “Puertos y Rampas” y a pantallas móviles. Se añadieron pruebas para consulta pública, carga demo y detalle con mapa. También se agregó `psycopg[binary]` para instalar el controlador de PostgreSQL en Windows.
+* **Git:** Los cambios se trabajaron en `feature/consulta-rutas-horarios`; `.env` permanece excluido del repositorio.
+
+### Prompts utilizados para esta actualización
+> *"necesito trabajaran en el apartado de rutas"*
+
+> *"necesito que las personas puedan consultar sobre los las rutas y los horarios, tambien recuerda crear ramas y el uso correcto de los CRUD"*
+
+> *"solo de demostracion pero que coincidan con los de puertos y rampas"*
+
+> *"las opciones de editar, eliminar o agregar sacalas ya que eso solo deberia de aparecer en las opciones de admin, al igual que el que dice nueva ruta en verde"*
+
+> *"es agregar la opcion de hacer click en unas de las opciones de rutas y horarios y que aparesca el mapa que muestre la ruta de esta ?¿"*
+
+> *"quiero que se vea un poco mas profecional el apartado de rutas y horarios como esta en puertos y rampas"*
+
+> *"ahora necesito que en el readme agreges todos los cambios que se hicieron y los prompts que se utilizaron"*
 
