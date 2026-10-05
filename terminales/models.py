@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -15,3 +16,13 @@ class Terminal(models.Model):
 
 	def __str__(self):
 		return f'{self.nombre} ({self.comuna})'
+
+	def clean(self):
+		errores = {}
+		for campo in ('nombre', 'comuna', 'estado', 'marea'):
+			valor = getattr(self, campo, '') or ''
+			if valor and not any(caracter.isalnum() for caracter in valor):
+				errores[campo] = 'Ingresa al menos una letra o un número; no uses solo signos.'
+
+		if errores:
+			raise ValidationError(errores)

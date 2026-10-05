@@ -194,3 +194,10 @@ Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio 
 * Se comprobó que los enlaces de Pargua, Chacao y Hornopirén abren una ficha con mapa y marcador. El terminal sin coordenadas muestra un mensaje informativo en lugar de un mapa vacío.
 * La suite completa del proyecto finalizó con **20 pruebas OK**, incluyendo los casos de terminales, mapas y datos de demostración.
 
+### Validación de terminales
+* Los campos nombre, comuna, estado y marea ahora requieren al menos una letra o un número; si se ingresan únicamente signos, Django Admin muestra un error y no guarda el registro. No se requiere una nueva migración.
+* Después de añadir esta validación, la suite completa del proyecto finalizó con **21 pruebas OK**.
+
+**Prompt utilizado:**
+> *"al momento de añadir una terminal que al colocar solo signos tire un error"*
+

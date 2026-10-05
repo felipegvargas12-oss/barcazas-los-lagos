@@ -128,6 +128,16 @@ class TerminalesTests(TestCase):
 		self.assertTrue(response.context['adminform'].form.errors)
 		self.assertEqual(Terminal.objects.count(), 0)
 
+	def test_admin_rejects_values_containing_only_symbols(self):
+		self.client.force_login(self.admin_user)
+		url = reverse('admin:terminales_terminal_add')
+		for campo in ('nombre', 'comuna', 'estado', 'marea'):
+			with self.subTest(campo=campo):
+				response = self.client.post(url, self.terminal_data(**{campo: '!!!@@@'}))
+				self.assertEqual(response.status_code, 200)
+				self.assertIn(campo, response.context['adminform'].form.errors)
+		self.assertEqual(Terminal.objects.count(), 0)
+
 	def test_admin_edits_and_deletes_terminal(self):
 		terminal = Terminal.objects.create(
 			nombre='Rampa anterior',
