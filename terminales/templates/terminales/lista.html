@@ -1,13 +1,52 @@
 {% extends 'base.html' %}
 {% block title %}Puertos y Rampas{% endblock %}
 
+{% block extra_head %}
+<style>
+    .terminals-intro { margin-top: -8px; margin-bottom: 24px; color: #53616f; }
+    .terminal-card { padding: 21px; border-left-color: #087e8b; }
+    .terminal-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .terminal-eyebrow { color: #53616f; font-size: 0.8rem; font-weight: 700; }
+    .terminal-name { margin: 5px 0 0; color: #153b50; }
+    .terminal-comuna { margin: 7px 0 0; color: #53616f; }
+    .terminal-status { flex: 0 0 auto; padding: 6px 10px; border-radius: 4px; background: #e4f4ec; color: #176b43; font-size: 0.85rem; font-weight: 700; }
+    .terminal-status-caution { background: #fff5df; color: #704d16; }
+    .terminal-tide { margin: 19px 0 0; padding: 13px 15px; background: #f4f7f6; border-radius: 4px; }
+    .terminal-tide strong { color: #153b50; }
+    .terminal-demo-note { margin: 16px 0 0; padding: 11px 14px; border-left: 3px solid #b7791f; background: #fff5df; color: #704d16; }
+    .terminals-empty { color: #53616f; }
+    @media (max-width: 600px) {
+        .terminal-card { padding: 17px; }
+        .terminal-card-header { flex-direction: column; gap: 10px; }
+        .terminal-status { align-self: flex-start; }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <h1>Ficha de Rampas y Terminales Marítimos</h1>
+<p class="terminals-intro">Consulta el estado operativo y las condiciones de marea de los terminales de la región.</p>
+
 {% for term in terminales %}
-    <div class="card">
-        <h3>{{ term.nombre }} ({{ term.comuna }})</h3>
-        <p>Estado del puerto: <strong>{{ term.estado }}</strong></p>
-        <p>Estado de mareas: {{ term.marea }}</p>
-    </div>
+    <article class="card terminal-card">
+        <header class="terminal-card-header">
+            <div>
+                <span class="terminal-eyebrow">Terminal marítimo</span>
+                <h2 class="terminal-name">{{ term.nombre }}</h2>
+                <p class="terminal-comuna">{{ term.comuna }}</p>
+            </div>
+            {% if term.estado == 'Operativa' %}
+                <span class="terminal-status">{{ term.estado }}</span>
+            {% else %}
+                <span class="terminal-status terminal-status-caution">{{ term.estado }}</span>
+            {% endif %}
+        </header>
+        <p class="terminal-tide"><strong>Estado de marea:</strong> {{ term.marea }}</p>
+        {% if term.es_demostracion %}
+            <p class="terminal-demo-note"><strong>Demostración:</strong> información ficticia, no confirma condiciones actuales.</p>
+        {% endif %}
+    </article>
+{% empty %}
+    <div class="card terminals-empty">No hay terminales ni rampas registradas todavía.</div>
 {% endfor %}
 {% endblock %}

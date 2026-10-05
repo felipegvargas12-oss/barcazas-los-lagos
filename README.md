@@ -175,3 +175,15 @@ Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio 
 
 > *"ahora necesito que en el readme agreges todos los cambios que se hicieron y los prompts que se utilizaron"*
 
+---
+
+## 8. Cambios recientes en Puertos y Rampas
+* **Datos persistentes:** Se agregó el modelo `Terminal` con nombre, comuna, estado operativo, marea y marca de demostración. La consulta pública ahora obtiene los registros desde PostgreSQL.
+* **CRUD administrativo:** Las operaciones para crear, editar y eliminar terminales se realizan desde Django Admin (`/admin/`); la página pública solo permite consultar.
+* **Datos de demostración:** La migración `terminales.0001_initial` crea la tabla del modelo. El comando `python manage.py cargar_terminales_demo` carga Pargua, Chacao y Hornopirén con los nombres y comunas relacionados con las rutas. Los registros son ficticios, se identifican como demostración y el comando se puede repetir sin duplicarlos.
+* **Interfaz y pruebas:** La página muestra estado operativo, marea y aviso de demostración con un diseño adaptable. Se añadieron pruebas para consulta pública, validación y CRUD en Admin y carga demo idempotente.
+* **Rama de trabajo:** `terminales`.
+
+### Prompt utilizado para esta actualización
+> *"necesito trabajar en puertos y rampas, y que la rama se llame terminales"*
+
