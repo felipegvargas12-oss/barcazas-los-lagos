@@ -190,3 +190,7 @@ Tuvimos problemas para manejar una colaboracion por Git y GitHub eso no impidio 
 
 > *"necesito que al hacer click en algunas de las opciones se muestre el mapa con la ubicacion de estas"*
 
+### Verificación final del mapa
+* Se comprobó que los enlaces de Pargua, Chacao y Hornopirén abren una ficha con mapa y marcador. El terminal sin coordenadas muestra un mensaje informativo en lugar de un mapa vacío.
+* La suite completa del proyecto finalizó con **20 pruebas OK**, incluyendo los casos de terminales, mapas y datos de demostración.
+
