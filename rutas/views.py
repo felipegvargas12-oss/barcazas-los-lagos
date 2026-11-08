@@ -1,52 +1,31 @@
-from django.db.models import Prefetch
-from django.shortcuts import get_object_or_404, render
-from django.utils import timezone
-from .models import Horario, Ruta
-from .map_data import MAP_POINTS
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from .models import Ruta
 from .serializers import RutaSerializer
 
-class RutaViewSet(viewsets.ModelViewSet):
-    queryset = Ruta.objects.all().order_by('-id')
-    serializer_class = RutaSerializer
-    # Permite GET público, exige JWT para POST, PUT, PATCH, DELETE
-    permission_classes = [IsAuthenticatedOrReadOnly]
+# ==========================================
+# 1. VISTAS WEB BÁSICAS (HTML)
+# ==========================================
 
 def inicio(request):
     return render(request, 'rutas/inicio.html')
 
 def horarios(request):
-    salidas_futuras = Horario.objects.filter(
-        activo=True,
-        salida__gte=timezone.now(),
-    )
-    trayectos = Ruta.objects.prefetch_related(
-        Prefetch('horarios', queryset=salidas_futuras)
-    ).order_by('origen', 'destino')
+    trayectos = Ruta.objects.all().order_by('-fecha_creacion')
     return render(request, 'rutas/horarios.html', {'trayectos': trayectos})
 
-
 def detalle_ruta(request, pk):
-    salidas_futuras = Horario.objects.filter(
-        activo=True,
-        salida__gte=timezone.now(),
-    )
-    ruta = get_object_or_404(
-        Ruta.objects.prefetch_related(
-            Prefetch('horarios', queryset=salidas_futuras)
-        ),
-        pk=pk,
-    )
-    puntos_mapa = [MAP_POINTS.get(ruta.origen), MAP_POINTS.get(ruta.destino)]
-    if any(punto is None for punto in puntos_mapa):
-        puntos_mapa = []
-    hornopiren_es_referencial = any(
-        punto['approximate_reference'] for punto in puntos_mapa
-    )
+    ruta = get_object_or_404(Ruta, pk=pk)
+    return render(request, 'rutas/detalle_ruta.html', {'ruta': ruta})
 
-    return render(request, 'rutas/detalle_ruta.html', {
-        'ruta': ruta,
-        'puntos_mapa': puntos_mapa,
-        'hornopiren_es_referencial': hornopiren_es_referencial,
-    })
+
+# ==========================================
+# 2. VISTA API REST (JSON / DRF)
+# ==========================================
+
+class RutaViewSet(viewsets.ModelViewSet):
+    queryset = Ruta.objects.all().order_by('-id')
+    serializer_class = RutaSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]

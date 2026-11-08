@@ -4,18 +4,16 @@ from . import views
 
 app_name = 'rutas'
 
-# Configuración del Router para la API REST
+# Configuración del Router para los endpoints de la API REST (/api/rutas/)
 router = DefaultRouter()
 router.register(r'api/rutas', views.RutaViewSet, basename='api-rutas')
 
 urlpatterns = [
-    # Rutas Web existentes (HTML)
+    # Páginas Web HTML existentes
     path('', views.inicio, name='inicio'),
     path('horarios/', views.horarios, name='horarios'),
-    path('crear/', views.crear_ruta, name='crear'),
-    path('editar/<int:pk>/', views.editar_ruta, name='editar'),
-    path('eliminar/<int:pk>/', views.eliminar_ruta, name='eliminar'),
+    path('horarios/<int:pk>/', views.detalle_ruta, name='detalle'),
     
-    # Endpoints de la API REST (/api/rutas/ y /api/rutas/<id>/)
+    # Endpoints de la API REST
     path('', include(router.urls)),
 ]
