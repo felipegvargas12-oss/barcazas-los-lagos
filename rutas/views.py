@@ -3,6 +3,15 @@ from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from .models import Horario, Ruta
 from .map_data import MAP_POINTS
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .serializers import RutaSerializer
+
+class RutaViewSet(viewsets.ModelViewSet):
+    queryset = Ruta.objects.all().order_by('-id')
+    serializer_class = RutaSerializer
+    # Permite GET público, exige JWT para POST, PUT, PATCH, DELETE
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 def inicio(request):
     return render(request, 'rutas/inicio.html')
