@@ -38,46 +38,48 @@
 <h1>Rutas y horarios</h1>
 <p class="routes-intro">Consulta trayectos, duración y próximas salidas disponibles.</p>
 
-{% for r in trayectos %}
-    <article class="card route-card">
-        <header class="route-card-header">
-            <div>
-                <span class="route-eyebrow">Trayecto marítimo</span>
-                <h2 class="route-title">
-                    <a href="{% url 'rutas:detalle' r.pk %}">{{ r.origen }} &rarr; {{ r.destino }}</a>
-                </h2>
-            </div>
-            {% if r.activa %}
-                <span class="route-status route-status-active">Activa</span>
-            {% else %}
-                <span class="route-status route-status-inactive">Suspendida</span>
+<div class="module-grid">
+    {% for r in trayectos %}
+        <article class="card module-card module-card-rutas route-card">
+            <header class="route-card-header">
+                <div>
+                    <span class="route-eyebrow">Trayecto marítimo</span>
+                    <h2 class="route-title">
+                        <a href="{% url 'rutas:detalle' r.pk %}">{{ r.origen }} &rarr; {{ r.destino }}</a>
+                    </h2>
+                </div>
+                {% if r.activa %}
+                    <span class="route-status route-status-active">Activa</span>
+                {% else %}
+                    <span class="route-status route-status-inactive">Suspendida</span>
+                {% endif %}
+            </header>
+
+            {% if r.es_demostracion %}
+                <p class="route-demo-note"><strong>Datos de demostración:</strong> no representan un servicio vigente.</p>
             {% endif %}
-        </header>
 
-        {% if r.es_demostracion %}
-            <p class="route-demo-note"><strong>Datos de demostración:</strong> no representan un servicio vigente.</p>
-        {% endif %}
+            <dl class="route-facts">
+                <div><dt>Duración estimada</dt><dd>{{ r.duracion_horas }} horas</dd></div>
+                <div><dt>Precio base</dt><dd>${{ r.precio_base }}</dd></div>
+            </dl>
 
-        <dl class="route-facts">
-            <div><dt>Duración estimada</dt><dd>{{ r.duracion_horas }} horas</dd></div>
-            <div><dt>Precio base</dt><dd>${{ r.precio_base }}</dd></div>
-        </dl>
-
-        <section class="route-departures" aria-label="Próximas salidas">
-            <h3>Próximas salidas</h3>
-            {% for salida in r.horarios.all %}
-                <ul class="departure-list">
-                    <li>
-                        <time datetime="{{ salida.salida|date:'c' }}">{{ salida.salida|date:'d/m/Y H:i' }}</time>
-                        <span>Salida programada</span>
-                    </li>
-                </ul>
-            {% empty %}
-                <p class="route-empty">No hay salidas programadas.</p>
-            {% endfor %}
-        </section>
-    </article>
-{% empty %}
-    <div class="card route-empty">No hay rutas registradas actualmente.</div>
-{% endfor %}
+            <section class="route-departures" aria-label="Próximas salidas">
+                <h3>Próximas salidas</h3>
+                {% for salida in r.horarios.all %}
+                    <ul class="departure-list">
+                        <li>
+                            <time datetime="{{ salida.salida|date:'c' }}">{{ salida.salida|date:'d/m/Y H:i' }}</time>
+                            <span>Salida programada</span>
+                        </li>
+                    </ul>
+                {% empty %}
+                    <p class="route-empty">No hay salidas programadas.</p>
+                {% endfor %}
+            </section>
+        </article>
+    {% empty %}
+        <div class="card route-empty">No hay rutas registradas actualmente.</div>
+    {% endfor %}
+</div>
 {% endblock %}

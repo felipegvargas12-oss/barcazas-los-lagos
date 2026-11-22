@@ -3,5 +3,87 @@
 
 {% block content %}
 <h1>Red de Conectividad Marítima de Los Lagos</h1>
+
+<!-- ========================================================= -->
+<div class="container my-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h4 class="card-title mb-2">🗺️ Mapa de Conectividad Marítima - Región de Los Lagos</h4>
+            <p class="text-muted small mb-3">
+                Visualización referencial de los principales terminales y rampas de transbordadores cubiertos por el sistema.
+            </p>
+            
+            <!-- Contenedor del Mapa (la altura fija en px es obligatoria) -->
+            <div id="mapa-barcazas" style="height: 400px; width: 100%; border-radius: 8px; z-index: 1;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 1. CSS y JS de Leaflet (Cargados desde CDN gratuito) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- 2. Script de inicialización del mapa -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Centrar vista en el Seno de Reloncaví / Puerto Montt / Chiloé Norte
+        var map = L.map('mapa-barcazas').setView([-41.65, -72.95], 9);
+
+        // Capa visual gratuita de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Marcadores de terminales y rampas principales
+        var terminales = [
+            { 
+                nombre: "Terminal Puerto Montt", 
+                coords: [-41.4717, -72.9369], 
+                desc: "Zarpe principal hacia Chaitén y rutas australes." 
+            },
+            { 
+                nombre: "Rampa Caleta La Arena", 
+                coords: [-41.6936, -72.6394], 
+                desc: "Cruce Estuario de Reloncaví hacia Caleta Puelche." 
+            },
+            { 
+                nombre: "Rampa Caleta Puelche", 
+                coords: [-41.7370, -72.6620], 
+                desc: "Conexión Carretera Austral (Ruta 7)." 
+            },
+            { 
+                nombre: "Rampa Pargua", 
+                coords: [-41.7915, -73.4475], 
+                desc: "Cruce Canal de Chacao hacia Chacao (Chiloé)." 
+            },
+            { 
+                nombre: "Terminal Calbuco", 
+                coords: [-41.7736, -73.1305], 
+                desc: "Conectividad insular archipiélago de Calbuco." 
+            }
+        ];
+
+        // Dibujar marcadores con ventanas emergentes (popups)
+        terminales.forEach(function(t) {
+            L.marker(t.coords)
+                .addTo(map)
+                .bindPopup("<b>" + t.nombre + "</b><br>" + t.desc);
+        });
+
+        // Líneas punteadas decorativas simulando rutas marítimas
+        var rutaReloncavi = [
+            [-41.6936, -72.6394], // La Arena
+            [-41.7370, -72.6620]  // Puelche
+        ];
+        L.polyline(rutaReloncavi, {color: '#0d6efd', weight: 4, dashArray: '8, 8'}).addTo(map);
+
+        var rutaChacao = [
+            [-41.7915, -73.4475], // Pargua
+            [-41.8325, -73.5240]  // Chacao
+        ];
+        L.polyline(rutaChacao, {color: '#0d6efd', weight: 4, dashArray: '8, 8'}).addTo(map);
+    });
+</script>
+
 <p>Bienvenido al portal informativo sobre la disponibilidad, horarios y estado de rampas en la región.</p>
 {% endblock %}

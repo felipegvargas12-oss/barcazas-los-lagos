@@ -9,6 +9,42 @@
         nav { background: #004080; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
         nav a { color: white; margin-right: 15px; text-decoration: none; font-weight: bold; }
         .card { background: white; padding: 15px; border-radius: 5px; margin-bottom: 10px; border-left: 5px solid #004080; }
+        .module-card {
+            padding: 22px;
+            border-left-width: 6px;
+            box-shadow: 0 2px 8px rgba(21, 59, 80, 0.08);
+            font-family: Arial, sans-serif;
+        }
+        .module-card * { font-family: inherit; }
+        .module-card-flota { border-left-color: #004080; }
+        .module-card-rutas { border-left-color: #087e8b; }
+        .module-card-terminales { border-left-color: #69aebd; }
+        .module-card h2,
+        .module-card h3 {
+            color: #153b50;
+            font-size: 1.25rem;
+            line-height: 1.3;
+        }
+        .module-card p { font-size: 1rem; line-height: 1.5; }
+        .module-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            align-items: start;
+            margin-top: 16px;
+        }
+        .module-grid > .module-card {
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+        }
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            nav { margin-bottom: 16px; }
+            nav a { display: inline-block; margin: 4px 12px 4px 0; }
+            .module-card { padding: 17px; }
+            .module-grid { grid-template-columns: 1fr; gap: 12px; }
+        }
         .alert { color: red; font-weight: bold; }
         .ok { color: green; font-weight: bold; }
     </style>
