@@ -13,7 +13,8 @@
     .route-status { flex: 0 0 auto; padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: 700; }
     .route-status-active { background: #e4f4ec; color: #176b43; }
     .route-status-inactive { background: #fbe9e7; color: #9c3028; }
-    .route-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+    /* Ajustado a auto-fit para acomodar la duración y las 4 tarifas sin romper la estética */
+    .route-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 12px; margin: 20px 0; }
     .route-facts > div { padding: 13px 15px; background: #f4f7f6; border-radius: 4px; }
     .route-facts dt { color: #53616f; font-size: 0.82rem; }
     .route-facts dd { margin: 4px 0 0; color: #153b50; font-size: 1.05rem; font-weight: 700; }
@@ -36,7 +37,7 @@
 
 {% block content %}
 <h1>Rutas y horarios</h1>
-<p class="routes-intro">Consulta trayectos, duración y próximas salidas disponibles.</p>
+<p class="routes-intro">Consulta trayectos, duración, tarifas por vehículo y próximas salidas disponibles.</p>
 
 <div class="module-grid">
     {% for r in trayectos %}
@@ -61,7 +62,10 @@
 
             <dl class="route-facts">
                 <div><dt>Duración estimada</dt><dd>{{ r.duracion_horas }} horas</dd></div>
-                <div><dt>Precio base</dt><dd>${{ r.precio_base }}</dd></div>
+                <div><dt>Pasajero a pie</dt><dd>${{ r.precio_base }}</dd></div>
+                <div><dt>Motocicleta</dt><dd>${{ r.precio_moto }}</dd></div>
+                <div><dt>Auto / SUV</dt><dd>${{ r.precio_auto }}</dd></div>
+                <div><dt>Camión / Bus</dt><dd>${{ r.precio_camion }}</dd></div>
             </dl>
 
             <section class="route-departures" aria-label="Próximas salidas">

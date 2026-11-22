@@ -7,8 +7,15 @@
     {% for term in terminales %}
         <article class="card module-card module-card-terminales">
             <h3>{{ term.nombre }} ({{ term.comuna }})</h3>
-            <p>Estado del puerto: <strong>{{ term.estado }}</strong></p>
-            <p>Estado de mareas: {{ term.marea }}</p>
+            {% if term.direccion %}
+                <p>Dirección: {{ term.direccion }}</p>
+            {% endif %}
+            <p>Estado del puerto: <strong>{{ term.get_estado_display }}</strong></p>
+            <p>Estado de mareas: {{ term.get_marea_display }}</p>
+        </article>
+    {% empty %}
+        <article class="card module-card module-card-terminales">
+            <p>No hay terminales o rampas registrados actualmente.</p>
         </article>
     {% endfor %}
 </div>

@@ -6,8 +6,9 @@ class RutaSerializer(serializers.ModelSerializer):
         model = Ruta
         fields = '__all__'
 
-    # Validación personalizada (Ejemplo: no permitir precios negativos o cero)
-    def validate_precio_base(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("El precio base debe ser mayor a 0.")
-        return value
+    def validate(self, data):
+        campos_precio = ['precio_base', 'precio_moto', 'precio_auto', 'precio_camion']
+        for campo in campos_precio:
+            if campo in data and data[campo] < 0:
+                raise serializers.ValidationError({campo: "El precio no puede ser negativo."})
+        return data
