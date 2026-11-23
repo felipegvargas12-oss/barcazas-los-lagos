@@ -1,0 +1,222 @@
+[
+{
+  "model": "flota.embarcacion",
+  "pk": 3,
+  "fields": {
+    "nombre": "Barcaza Don Beto",
+    "matricula": "CB-2810",
+    "capacidad_pasajeros": 120,
+    "capacidad_vehicular": 24,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 4,
+  "fields": {
+    "nombre": "Barcaza Puluqui",
+    "matricula": "CB-2915",
+    "capacidad_pasajeros": 100,
+    "capacidad_vehicular": 20,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 5,
+  "fields": {
+    "nombre": "Barcaza Don Baldo",
+    "matricula": "CB-3540",
+    "capacidad_pasajeros": 246,
+    "capacidad_vehicular": 45,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 6,
+  "fields": {
+    "nombre": "Barcaza Queulat",
+    "matricula": "CB-3612",
+    "capacidad_pasajeros": 220,
+    "capacidad_vehicular": 40,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 7,
+  "fields": {
+    "nombre": "Barcaza Tehuelche",
+    "matricula": "CB-4120",
+    "capacidad_pasajeros": 250,
+    "capacidad_vehicular": 50,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 8,
+  "fields": {
+    "nombre": "Barcaza Hornopirén",
+    "matricula": "CB-4185",
+    "capacidad_pasajeros": 240,
+    "capacidad_vehicular": 48,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 9,
+  "fields": {
+    "nombre": "Barcaza Alonso de Ercilla",
+    "matricula": "CB-3720",
+    "capacidad_pasajeros": 180,
+    "capacidad_vehicular": 30,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 10,
+  "fields": {
+    "nombre": "Barcaza Kataik",
+    "matricula": "CB-4950",
+    "capacidad_pasajeros": 260,
+    "capacidad_vehicular": 60,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 11,
+  "fields": {
+    "nombre": "Barcaza Cruz del Sur II",
+    "matricula": "CB-3214",
+    "capacidad_pasajeros": 360,
+    "capacidad_vehicular": 70,
+    "activo": true
+  }
+},
+{
+  "model": "flota.embarcacion",
+  "pk": 12,
+  "fields": {
+    "nombre": "Barcaza Don Orlando I",
+    "matricula": "CB-5412",
+    "capacidad_pasajeros": 366,
+    "capacidad_vehicular": 85,
+    "activo": false
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 1,
+  "fields": {
+    "nombre": "Rampa La Vega (Calbuco)",
+    "marea": "Alta",
+    "comuna": "Calbuco",
+    "direccion": "Costanera La Vega s/n, Calbuco",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 2,
+  "fields": {
+    "nombre": "Rampa San Ramón (Isla Puluqui)",
+    "marea": "Alta",
+    "comuna": "Calbuco",
+    "direccion": "Sector San Ramón, Isla Puluqui",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 3,
+  "fields": {
+    "nombre": "Puerto de Quellón",
+    "marea": "Media",
+    "comuna": "Quellón",
+    "direccion": "Av. Pedro Montt s/n, Quellón",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 4,
+  "fields": {
+    "nombre": "Terminal de Chaitén",
+    "marea": "Media",
+    "comuna": "Chaitén",
+    "direccion": "Costanera Norte s/n, Chaitén",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 5,
+  "fields": {
+    "nombre": "Rampa de Hornopirén",
+    "marea": "Subiendo",
+    "comuna": "Hualaihué",
+    "direccion": "Av. Bernardo O'Higgins s/n, Hornopirén",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 6,
+  "fields": {
+    "nombre": "Rampa Caleta Gonzalo",
+    "marea": "Subiendo",
+    "comuna": "Chaitén",
+    "direccion": "Ruta 7 Carretera Austral km 159",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 7,
+  "fields": {
+    "nombre": "Rampa Caleta La Arena",
+    "marea": "Baja",
+    "comuna": "Puerto Montt",
+    "direccion": "Ruta 7 km 45, Caleta La Arena",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 8,
+  "fields": {
+    "nombre": "Rampa Caleta Puelche",
+    "marea": "Baja",
+    "comuna": "Hualaihué",
+    "direccion": "Ruta 7 km 58, Caleta Puelche",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 9,
+  "fields": {
+    "nombre": "Rampa de Pargua",
+    "marea": "Alta",
+    "comuna": "Calbuco",
+    "direccion": "Ruta 5 Sur km 1082, Pargua",
+    "estado": "Operativo"
+  }
+},
+{
+  "model": "terminales.terminal",
+  "pk": 10,
+  "fields": {
+    "nombre": "Rampa de Chacao",
+    "marea": "Alta",
+    "comuna": "Ancud",
+    "direccion": "Ruta 5 Sur, Canal de Chacao",
+    "estado": "Con precaución"
+  }
+}
+]
